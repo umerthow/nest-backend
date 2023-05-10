@@ -5,7 +5,7 @@ import { IResponseBase } from '@interfaces/common/iresponse-api.interface';
 export default abstract class ResponseApiServiceAdapterProvider {
   protected constructor() {}
 
-  async send(res: Response, details: Record<string, unknown>): Promise<Response<IResponseBase> | any> {
+  async send(res: Response, details: Record<string, any>): Promise<Response<IResponseBase> | any> {
     return responseApiUtil(res, details);
   }
 }

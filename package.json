@@ -46,6 +46,7 @@
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.1.4",
     "@nestjs/schematics": "^9.0.3",
+    "@nestjs/swagger": "^6.3.0",
     "@nestjs/testing": "^9.1.4",
     "@nestjs/typeorm": "^9.0.1",
     "@types/compression": "^1.7.2",

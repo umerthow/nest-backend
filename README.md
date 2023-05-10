@@ -8,10 +8,7 @@
 ### Configuration
 
 Environment Option :
-> copy & paste file `.env.default` into `.env` and adjust your configuration
-
-Activate Husky Hook :
-> run `npm run prepare` to activate Husky Hook (one time)
+> copy & paste file `.env.sample` into `.env` and adjust your configuration
 
 ### Running the Application
 
@@ -71,3 +68,6 @@ health check : `/sunbytes/v1/health`
     }
 }
 ```
+
+### Swagger
+> http://localhost:3000/api#/default/UserController_createUser

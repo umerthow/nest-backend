@@ -9,6 +9,7 @@ import { NextFunction, Request, Response } from 'express';
 import httpRequestLoggerMiddleware from '@middlewares/http-request-logger.middleware';
 import { networkInterfaces } from 'os';
 import AppModule from './app.module';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 function getPrivateIP() {
   const nets = networkInterfaces();
@@ -51,6 +52,16 @@ async function bootstrap() {
     type: VersioningType.URI
   });
   app.setGlobalPrefix('sunbytes');
+
+  const config = new DocumentBuilder()
+    .setTitle('Api example')
+    .setDescription('The API description')
+    .setVersion('1.0')
+    .addTag('Sunbytes')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
   await app.listen(port, async () => {
     Logger.log(`🚀 Server is Running on: ${await app.getUrl()}`);
   });
