@@ -1,0 +1,7 @@
+.idea
+.env
+node_modules
+dist
+coverage
+secretTemplate.development.json
+secretTemplate.staging.json
