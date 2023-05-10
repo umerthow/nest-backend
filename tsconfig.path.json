@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@config/*": ["./config/*"],
+      "@constants/*": ["./constants/*"],
+      "@decorators/*": ["./decorators/*"],
+      "@dto/*": ["./dto/*"],
+      "@filters/*": ["./filters/*"],
+      "@guards/*": ["./guards/*"],
+      "@interfaces/*": ["./interfaces/*"],
+      "@middlewares/*": ["./middlewares/*"],
+      "@models/*": ["./models/*"],
+      "@modules/*": ["./modules/*"],
+      "@pipes/*": ["./pipes/*"],
+      "@providers/*": ["./providers/*"],
+      "@utils/*": ["./utils/*"],
+      "@interceptors/*": ["./interceptors/*"]
+    }
+    // "rootDirs": [],    /* List of root folders whose combined content represents the structure of the project at runtime. */
+  }
+}
