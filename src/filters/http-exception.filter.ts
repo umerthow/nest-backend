@@ -1,31 +1,15 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { InjectRedis } from '@liaoliaots/nestjs-redis';
-import Redis from 'ioredis';
-import { Repository } from 'typeorm';
-import stringTemplate from 'string-template';
 import { Response } from 'express';
 import {
   IResponseError,
   IResponseErrorHttp,
   IResponseValidationError
 } from '@interfaces/common/iresponse-api.interface';
-import { MessagesEntity } from '@models/entities/messages.entity';
-import { ERROR } from '@constants/client-code.constant';
 import { responseApiErrorUtil } from '@utils/response-api.util';
-import { getMessageValue } from '@utils/message.util';
-import { parseAcceptLanguageHeader } from '@utils/parse.util';
-
 @Injectable()
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-  constructor(
-    @InjectRedis('MESSAGES') private readonly redisService: Redis,
-    @InjectRepository(MessagesEntity)
-    private readonly messageRepository: Repository<MessagesEntity>
-  ) {
-    this.redisService = redisService;
-    this.messageRepository = messageRepository;
+  constructor() {
   }
 
   async catch(
@@ -34,14 +18,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
   ): Promise<Promise<IResponseError> | Response<IResponseError>> {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
-    const { headers } = ctx.getRequest();
     const errResponse: any = exception.getResponse();
 
     const {
       clientCode,
       type,
       defaultDetail,
-      name,
       redirectUrl,
       isShowLogErrorHttpService,
       exceptionError
@@ -52,39 +34,16 @@ export class HttpExceptionFilter implements ExceptionFilter {
     } else if (exceptionError) {
       Logger.error(`${exceptionError.message}: ${exceptionError.stack}`);
     }
-
-    const isErrorValidation = clientCode === ERROR.VALIDATION;
-
-    const getMessage = await getMessageValue({
-      clientCode,
-      language: parseAcceptLanguageHeader(headers['accept-language']),
-      redisService: this.redisService,
-      messageRepository: this.messageRepository,
-      type,
-      isErrorValidation
-    });
-
-    let customDetail;
-    if (isErrorValidation) {
-      customDetail = await this.getResponseValidation(
-        clientCode,
-        parseAcceptLanguageHeader(headers['accept-language']),
-        defaultDetail
-      );
-    }
-
-    const status = Number(getMessage?.status) || exception.getStatus();
+    const status = exception.getStatus();
     const { name: errorType, message } = exception;
 
     const details = {
-      success: getMessage?.success || false,
+      success: false,
       status,
       clientCode,
-      message: getMessage?.message
-        ? stringTemplate(getMessage.message, { name: isErrorValidation ? '*' : name })
-        : message,
+      message,
       type: type || errorType,
-      errDetail: customDetail || defaultDetail
+      errDetail: defaultDetail
     };
 
     if (redirectUrl) {
@@ -95,24 +54,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
   }
 
   async getResponseValidation(
-    clientCode: string,
-    language: string,
     defaultDetail: IResponseValidationError | IResponseValidationError[] | undefined
   ): Promise<Promise<IResponseValidationError[]> | Record<string, unknown>[]> {
     return Promise.all(
       Array.isArray(defaultDetail)
         ? defaultDetail.map(async (item: IResponseValidationError) => {
             const { field, type } = item;
-            const getMessage = await this.messageRepository.findOne({
-              where: {
-                clientCode,
-                errorServerCode: type,
-                language
-              }
-            });
             return {
               field,
-              message: getMessage?.message ? stringTemplate(getMessage.message, { name: field }) : ''
+              message: type
             };
           })
         : []

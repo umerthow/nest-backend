@@ -21,7 +21,7 @@ interface IDetailError {
 interface IDetailParamResponse {
   success: boolean;
   status: number;
-  message: string;
+  message: string | undefined;
   clientCode: string;
   data?: Record<string, unknown> | Record<string, unknown>[];
   additionalResponse?: Record<string, any>;
@@ -53,8 +53,6 @@ export const responseApiUtil = (response: Response, details: IDetailParamRespons
     status,
     clientCode,
     message,
-    apiVersion: VERSION_API,
-    apiVersionDate: VERSION_API_DATE,
     data,
     ...additionalResponse
   });
