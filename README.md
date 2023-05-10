@@ -71,3 +71,7 @@ health check : `/sunbytes/v1/health`
 
 ### Swagger
 > http://localhost:3000/api#/default/UserController_createUser
+
+
+### LOG 
+> log payload shoule in folder log as `.json` file
