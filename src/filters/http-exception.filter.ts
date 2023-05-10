@@ -6,6 +6,7 @@ import {
   IResponseValidationError
 } from '@interfaces/common/iresponse-api.interface';
 import { responseApiErrorUtil } from '@utils/response-api.util';
+import { jsonToString } from '@utils/parse.util';
 @Injectable()
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -20,6 +21,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse();
     const errResponse: any = exception.getResponse();
 
+    
     const {
       clientCode,
       type,
@@ -28,6 +30,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
       isShowLogErrorHttpService,
       exceptionError
     }: IResponseErrorHttp = errResponse;
+
+    Logger.error(`Error: ${jsonToString(errResponse)}`);
 
     if (isShowLogErrorHttpService && exceptionError) {
       Logger.error(`Error Status ${exceptionError.response?.status}: ${exceptionError.response?.data}`);

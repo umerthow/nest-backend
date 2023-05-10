@@ -4,9 +4,8 @@ import helmet from 'helmet';
 import compression from 'compression';
 import publicIp from 'public-ip';
 import requestIp from 'request-ip';
-import { HttpStatus, InternalServerErrorException, Logger, VersioningType } from '@nestjs/common';
+import { HttpStatus, Logger, VersioningType } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
-import { ERROR } from '@constants/client-code.constant';
 import httpRequestLoggerMiddleware from '@middlewares/http-request-logger.middleware';
 import { networkInterfaces } from 'os';
 import AppModule from './app.module';
@@ -32,24 +31,6 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = process.env.PORT || 3000;
 
-  const corsOptions = {
-    origin(requestOrigin: string, callback: (err: Error | null, isPass?: boolean) => void) {
-      if (configService.get('whiteListedOrigin').split(',').indexOf(requestOrigin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(
-          new InternalServerErrorException({
-            clientCode: ERROR.CORS_ERROR
-          })
-        );
-      }
-    },
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    optionsSuccessStatus: 204,
-    credentials: true,
-    exposedHeaders: ['Language']
-  };
-
   // middleware express
   app.use(helmet());
   app.use(compression());
@@ -69,8 +50,7 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI
   });
-  app.setGlobalPrefix('boilerplate');
-  app.enableCors(corsOptions);
+  app.setGlobalPrefix('sunbytes');
   await app.listen(port, async () => {
     Logger.log(`🚀 Server is Running on: ${await app.getUrl()}`);
   });

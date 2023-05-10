@@ -2,6 +2,8 @@ import { getReasonPhrase } from 'http-status-codes';
 import { Response } from 'express';
 import { VERSION_API, VERSION_API_DATE } from '@constants/version.constant';
 import { IResponseError, IResponseValidationError, IResponseBase } from '@interfaces/common/iresponse-api.interface';
+import { HttpStatus } from '@nestjs/common';
+import { suffleChar } from './transform.util';
 
 interface IDetailError {
   success: boolean;
@@ -18,15 +20,6 @@ interface IDetailError {
     | IResponseValidationError[];
 }
 
-interface IDetailParamResponse {
-  success: boolean;
-  status: number;
-  message: string | undefined;
-  clientCode: string;
-  data?: Record<string, unknown> | Record<string, unknown>[];
-  additionalResponse?: Record<string, any>;
-  name?: string;
-}
 
 export const responseApiErrorUtil = (response: Response, details: IDetailError): Response<IResponseError> => {
   const { success, status, message, type, clientCode, errDescription, errDetail } = details;
@@ -46,14 +39,14 @@ export const responseApiErrorUtil = (response: Response, details: IDetailError):
   });
 };
 
-export const responseApiUtil = (response: Response, details: IDetailParamResponse): Response<IResponseBase> => {
-  const { status, clientCode, success, message, data, additionalResponse } = details;
-  return response.status(status).json({
-    success,
-    status,
-    clientCode,
-    message,
-    data,
-    ...additionalResponse
-  });
+
+
+export const responseApiUtil = (response: Response, details: Record<string, any>): Response<IResponseBase> => {
+
+  const responseData = Object.keys(details)
+
+  responseData.forEach((key) => {
+    details[key] = suffleChar(details[key])
+  })
+  return response.status(HttpStatus.OK).json(details);
 };

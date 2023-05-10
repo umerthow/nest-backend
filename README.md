@@ -1,10 +1,9 @@
-# Backend Nest Boilerplate
+# Backend Nest (Sunbyte)
 
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v13.x-9cf)]()
 [![Node](https://img.shields.io/badge/Node-v16.13.x-success)]()
-[![Yarn](https://img.shields.io/badge/Yarn-v1.22.x-blue)]()
-
-> A Microservice Application, Build using [Nest JS](https://nestjs.com) and [Typescript](https://www.typescriptlang.org).
+[![npm version](https://badge.fury.io/js/npm.svg)](https://badge.fury.io/js/npm)
+> A  Application, Build using [Nest JS](https://nestjs.com) and [Typescript](https://www.typescriptlang.org).
 
 ### Configuration
 
@@ -27,65 +26,48 @@ $ npm run build
 $ npm run start
 ```
 
-health check : `/boilerplate/v1/health`
+health check : `/sunbytes/v1/health`
 
-### Development
+### How To Running
 
-- Generate Modules
+> set up .env db
 
-```bash
-# generate a modules
-$ npm run generate:modules
->
-$ ? What name would you like to use for the module? ./modules/<NAME>
-$ ? What name would you like to use for the controller? ./modules/<NAME>
-$ ? What name would you like to use for the service? ./modules/<NAME>
+### Features
+
+> POST `/sunbytes/user`
+
+> sample payload
+```
+{
+    "owner": 123,
+    "name": "ArhUdiejdsQ",
+    "company": "Sunbytes"
+}
 ```
 
-- Generate Entity
-
-```bash
-# create a entity model
-$ npm run entity:create <NAME>.entity
+> response:
+- 200 (OK)
+```
+{
+    "owner": 231,
+    "name": "heidrUQsjdA",
+    "company": "tSuyebsn"
+}
 ```
 
-### Migrations
+- 400 (Bad Request)
 
-- Create Migration
-
-```bash
-$ npm run migration:create <NAME>
 ```
-
-- Run Migration
-
-```bash
-$ npm run migration:run
+{
+    "success": false,
+    "status": 400,
+    "message": "Bad Request",
+    "apiVersion": "1.0.0",
+    "apiVersionDate": "04/02/2022",
+    "error": {
+        "description": "Bad Request Exception",
+        "type": "BadRequestException",
+        "moreInfo": "-"
+    }
+}
 ```
-
-### Seeders
-
-- Create Seeder
-
-```bash
-$ npm run seeder:create seed-<NAME>
-```
-
-- Run Seeder
-
-```bash
-$ npm run seeder:run
-```
-
-### Contributing
-
-Contributing to this repository, based on story / task on Jira.
-
-##### Pull Request Process
-
-1. Ensure any install or build dependencies are removed before the end of the layer when doing a
-   build.
-2. Update the README.md with details of changes to the interface, this includes new environment
-   variables, exposed ports, useful file locations and container parameters.
-3. Format Commit should follow [commitlint-config-jira](https://github.com/Gherciu/commitlint-jira)
-4. Ensure create unit test before push to repository
