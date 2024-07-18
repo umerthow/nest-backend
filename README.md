@@ -1,4 +1,4 @@
-# Backend Nest (Sunbyte)
+# Backend Nest
 
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v13.x-9cf)]()
 [![Node](https://img.shields.io/badge/Node-v16.13.x-success)]()
